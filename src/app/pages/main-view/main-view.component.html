@@ -1,0 +1,44 @@
+<div class="root">
+  <div class="navbar has-background-dark">
+    <div class="navbar-brand">
+      <div class="navbar-item">
+        <h1 class="app-name has-gradient-text">Kanban - Projeto DSW - 6 Semestre</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="board">
+
+    <div class="board-wrapper">
+
+      <div class="board-columns" cdkDropListGroup>
+        <div class="board-column" *ngFor="let column of board.columns">
+
+          <div class="column-title row">
+            <div class="col">
+              {{ column.name }}
+            </div>
+            <div class= "col-auto">
+              <button *ngIf="column.isToDo" type="button" class="btn btn-primary">+</button>
+            </div>
+          </div>
+
+          <div class="tasks-container" cdkDropList [cdkDropListData]="column.tasks" (cdkDropListDropped)="drop($event)">
+            <div class="task" *ngFor="let item of column.tasks" cdkDrag>
+              <div class="col">
+                {{ item.name }}
+              </div>
+              <div style="margin-right: 15px; font-size:18px;" class="col-2">
+                {{ item.percentage }}%
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
