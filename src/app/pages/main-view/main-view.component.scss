@@ -44,7 +44,7 @@
                 flex-basis: 0; 
 
                 min-width: 300px;
-                margin: 50px;
+                margin: 30px;
                 padding: 25px;
 
                 border-radius: 4px;
@@ -60,6 +60,21 @@
                     text-transform: uppercase;
                     margin-bottom: 20px;
                 }
+            }
+        }
+    }
+
+    .board-form {
+
+        .board-columns {
+
+            .board-column {
+                background: #3c4042;
+
+                margin: 30px;
+                padding: 25px;
+
+                border-radius: 4px;
             }
         }
     }
