@@ -1,3 +1,3 @@
 export class Task {
-    constructor(public name: string, public percentage: number) {}
+    constructor(public id: number, public name: string, public percentage: number) {}
 }

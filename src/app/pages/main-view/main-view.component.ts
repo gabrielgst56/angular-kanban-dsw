@@ -4,6 +4,7 @@ import { Board } from 'src/app/models/board.model';
 import { FormGroup, FormBuilder, Validators } from '../../../../node_modules/@angular/forms';
 import { Column } from 'src/app/models/column.model';
 import { Task } from 'src/app/models/task.model';
+import { TaskService } from 'src/app/services/task.service';
 
 @Component({
   selector: 'app-main-view',
@@ -13,7 +14,8 @@ import { Task } from 'src/app/models/task.model';
 
 export class MainViewComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder,
+    private taskService: TaskService) { }
 
   board: Board = null;
   isEditar: boolean = false;
@@ -37,6 +39,8 @@ export class MainViewComponent implements OnInit {
       nameEdit: ['', Validators.required],
       percentEdit: ['', Validators.required]
     });
+
+    this.taskService.getAllTasks();
   }
 
   get f() { return this.addForm.controls; }
@@ -67,18 +71,20 @@ export class MainViewComponent implements OnInit {
     }
 
     if(percent == 0){
-      this.board.columns[0].tasks.push(new Task(name, percent));
+      this.board.columns[0].tasks.push(new Task(null, name, percent));
     }
     else if(percent > 0 && percent < 100){
-      this.board.columns[1].tasks.push(new Task(name, percent));
+      this.board.columns[1].tasks.push(new Task(null, name, percent));
     }
     else if(percent == 100){
-      this.board.columns[2].tasks.push(new Task(name, percent));
+      this.board.columns[2].tasks.push(new Task(null, name, percent));
     }
     else{
       alert("Porcentagem inválida.");
+      return;
     }
 
+    this.taskService.addTask(new Task(null, name, percent));
     
     this.addForm.setValue({
       nameAdd : "",
@@ -99,19 +105,20 @@ export class MainViewComponent implements OnInit {
     }
 
     if(percent == 0){
-      this.board.columns[0].tasks.push(new Task(name, percent));
+      this.board.columns[0].tasks.push(new Task(null, name, percent));
       edited = true;
     }
     else if(percent > 0 && percent < 100){
-      this.board.columns[1].tasks.push(new Task(name, percent));
+      this.board.columns[1].tasks.push(new Task(null, name, percent));
       edited = true;
     }
     else if(percent == 100){
-      this.board.columns[2].tasks.push(new Task(name, percent));
+      this.board.columns[2].tasks.push(new Task(null, name, percent));
       edited = true;
     }
     else{
       alert("Porcentagem inválida.");
+      return;
     }
 
     if(edited){
