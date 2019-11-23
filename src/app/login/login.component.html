@@ -1,0 +1,32 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css"
+    integrity="sha384-i1LQnF23gykqWXg6jxC2ZbCbUMxyw5gLZY6UiUS98LYV5unm8GWmfkIS6jqJfb4E" crossorigin="anonymous">
+
+<body>
+    <div class="row justify-content-sm-center pt-5">
+        <div class="col-sm-8 col-md-7">
+            <h3 class="text-center text-light">Welcome to Kanban</h3>
+            <div class="card-body">
+                <div class="row justify-content-sm-center">
+                    <form class="col-md-6 ">
+                        <div class="alert alert-danger" role="alert" *ngIf="!isCompleted && submitted">
+                            Incorrect username or password.
+                        </div>
+                        <div class="content justify-content-center ">
+                            <input type="text" class="form-control " placeholder="Email" #userEmail required autofocus>
+                            <br>
+                            <input type="password" class="form-control" placeholder="Password" #userPassword required>
+                        </div>
+                        <div class="content pt-4 d-flex justify-content-sm-center">
+                            <button type="submit" class="btn btn-lg btn-dark mb-1 col-lg-5 ml-1"
+                                (click)="onSubmit(userEmail.value, userPassword.value)">Login</button>
+                            <button type="submit" class="btn btn-lg btn-dark mb-1 col-lg-5 ml-1"
+                                (click)="register()">Register</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

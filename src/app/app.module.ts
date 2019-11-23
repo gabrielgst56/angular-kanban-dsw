@@ -10,10 +10,15 @@ import { MainViewComponent } from './pages/main-view/main-view.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './login/login.component';
+import { AuthService } from './services/auth.service';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    LoginComponent,
+    RegisterComponent,
     MainViewComponent
   ],
   imports: [
@@ -25,7 +30,7 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [TaskService],
+  providers: [TaskService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

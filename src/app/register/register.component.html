@@ -1,0 +1,46 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css"
+    integrity="sha384-i1LQnF23gykqWXg6jxC2ZbCbUMxyw5gLZY6UiUS98LYV5unm8GWmfkIS6jqJfb4E" crossorigin="anonymous">
+
+<body>
+    <div class="row justify-content-sm-center pt-5">
+        <div class="col-sm-8 col-md-7">
+            <h3 class="text-center text-light">Create your account in Kanban</h3>
+            <div class="card-body">
+                <div class="row justify-content-sm-center">
+                    <form [formGroup]="form" (ngSubmit)="onSubmit(userEmail.value, userPassword.value)"
+                        class="col-md-6">
+                        <div class="alert alert-danger" role="alert" *ngIf="isExistEmail && submitted">
+                            E-mail already registered! 
+                        </div>
+                        <div class="content">
+                            <input type="email" formControlName="email" email pattern=".{1,}@[_a-z0-9A-Z]+(\.[a-z0-9A-Z]+)+" 
+                                class="form-control " placeholder="Example@email.com"
+                                [ngClass]="{ 'is-invalid': f.email.errors && submitted }" #userEmail required autofocus>
+                            <div class="invalid-feedback" *ngIf="submitted">
+                                <div *ngIf="f.email.errors?.required">E-mail is required</div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="content">
+                            <input type="password" formControlName="password"
+                                class="form-control "
+                                [ngClass]="{ 'is-invalid': f.password.errors && submitted }" placeholder="Password"
+                                #userPassword required>
+                            <div class="invalid-feedback" *ngIf="submitted">
+                                <div *ngIf="f.password.errors?.required">Password is required</div>
+                                <div *ngIf="f.password.errors?.minlength">Password must be at least 6 characters</div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row  d-flex justify-content-sm-center">
+                            <button class="btn btn-lg btn-success btn-block  mb-1  col-lg-8" type="submit">Create an
+                                account</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

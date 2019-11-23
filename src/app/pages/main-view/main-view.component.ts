@@ -5,6 +5,8 @@ import { FormGroup, FormBuilder, Validators } from '../../../../node_modules/@an
 import { Column } from 'src/app/models/column.model';
 import { Task } from 'src/app/models/task.model';
 import { TaskService } from 'src/app/services/task.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-view',
@@ -15,7 +17,8 @@ import { TaskService } from 'src/app/services/task.service';
 export class MainViewComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
-    private taskService: TaskService) { }
+    private taskService: TaskService, private authService: AuthService,
+    private router: Router) { }
 
   board: Board = null;
   isEditar: boolean = false;
@@ -24,6 +27,10 @@ export class MainViewComponent implements OnInit {
   actualEditTask: Task;
 
   ngOnInit() {
+    if(!this.authService.isAuthenticated){
+      this.router.navigate(['/login']);
+    } 
+
     this.board = new Board([
       new Column('A se fazer', true, []),
       new Column('Em andamento', false, []),
