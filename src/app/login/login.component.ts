@@ -11,8 +11,8 @@ import { AuthService } from '../services/auth.service'; // Serviço de autentica
 })
 export class LoginComponent implements OnInit {
 
-    isCompleted: boolean;
-    submitted: boolean;
+    //isCompleted: boolean;
+   // submitted: boolean;
 
     private users: Array<User> = [];
 
@@ -23,16 +23,15 @@ export class LoginComponent implements OnInit {
 
     onSubmit(email: string, password: string) {
 
-        this.submitted = true;
-        this.isCompleted = true;
+       // this.submitted = true;
+       // this.isCompleted = true;
 
-        let result = this.authService.login(email, password);
-        if (result) {
-            this.isCompleted = result;
-            this.router.navigate(['/kanban']);
-        } else {
-            this.isCompleted = result;
-        }
+        let result = this.authService.login(email, password).subscribe((result) => {
+            if (result[0] != null){
+                this.router.navigate(['/kanban']);
+            } 
+        });
+
     }
 
     register() {

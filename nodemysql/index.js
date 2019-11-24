@@ -1,8 +1,10 @@
-	const express = require('express');
+const express = require('express');
 const app = express();         
 const bodyParser = require('body-parser');
 const port = 3000; //porta padrão
 const mysql = require('mysql');
+const crypto = require("crypto");
+const validator = require('email-validator');
 
 	
 //configurando o body parser para pegar POSTS mais tarde
@@ -20,6 +22,13 @@ app.listen(port);
 console.log('API funcionando!');
 
 
+const DADOS_CRIPTOGRAFAR = {
+    algoritmo : "aes256",
+    segredo : "chaves", 
+    tipo : "hex"
+};
+
+
 function execSQLQuery(sqlQry, res){
   const connection = mysql.createConnection({
     host     : 'localhost',
@@ -28,38 +37,73 @@ function execSQLQuery(sqlQry, res){
     password : 'admin',
     database : 'dsw'
   });
- 
+
+
   connection.query(sqlQry, function(error, results, fields){
       if(error) 
         res.json(error);
       else
         res.json(results);
       connection.end();
-      console.log('executou!');
   });
 }
 
+function criptografar(senha) {
+    const cipher = crypto.createCipher(DADOS_CRIPTOGRAFAR.algoritmo, DADOS_CRIPTOGRAFAR.segredo);
+    cipher.update(senha);
+    return cipher.final(DADOS_CRIPTOGRAFAR.tipo);
+};
+
+router.post('/register', (req, res) =>{
+    const email = req.body.email;
+    let password = req.body.password;
+    
+    let flag = validator.validate(email);
+    if (flag){
+
+        if (password.length >= 6){
+
+            password = criptografar(password);
+        
+            execSQLQuery(`INSERT INTO User(email, password) VALUES('${email}','${password}')`, res);
+
+        }else{
+            res.json(false);
+        }
+
+    }else {
+        res.json(false);
+    }
+});
+
+router.post('/login', (req, res) =>{
+    const email = req.body.email.substring(0,150);
+    let password = req.body.password.substring(0, 255);
+
+    password = criptografar(password);
+    
+    execSQLQuery(`SELECT * FROM User WHERE email = '${email}' AND password = '${password}'`, res);
+});
+
 router.get('/task', (req, res) =>{
-    console.log('All Tasks!');
     execSQLQuery('SELECT * FROM Task', res);
 })
 
 
 router.get('/task/:id?', (req, res) =>{
-    let filter = '';
-    if(req.params.id) filter = ' WHERE ID=' + parseInt(req.params.id);
-    execSQLQuery('SELECT * FROM Task' + filter, res);
+    let fk_User = parseInt(req.params.id);
+    execSQLQuery('SELECT * FROM Task WHERE fk_User =' + fk_User, res);
 })
 
 router.delete('/task/:id', (req, res) =>{
-    execSQLQuery('DELETE FROM Task WHERE ID=' + parseInt(req.params.id), res);
+    execSQLQuery('DELETE FROM Task WHERE ID= ' + parseInt(req.params.id), res);
 })
 
 router.post('/task', (req, res) =>{
-    console.log('Adicionou!');
     const name = req.body.name.substring(0,150);
     const percentage = parseInt(req.body.percentage);
-    execSQLQuery(`INSERT INTO Task(name, percentage) VALUES('${name}','${percentage}')`, res);
+    const fk_User = parseInt(req.body.fk_User);
+    execSQLQuery(`INSERT INTO Task(name, percentage, fk_User) VALUES('${name}','${percentage}', '${fk_User}')`, res);
 });
 
 router.patch('/task/:id', (req, res) =>{
