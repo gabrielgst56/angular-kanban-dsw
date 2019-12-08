@@ -92,6 +92,11 @@ export class MainViewComponent implements OnInit {
         }
     }
 
+    public logout() {
+        this.authService.isAuthenticated = false;
+        this.router.navigate(['/login']);
+    }
+
     public addTask() {
 
         let percent = this.addForm.value.percentAdd;
