@@ -19,7 +19,6 @@ export class AuthService {
         let res = this.http.post<boolean>(this.baseurl + 'login', new User(null ,email, password));
         res.subscribe((result) => {
             if (result[0] != null){
-                console.log(result[0]);
                 this.user = new User(result[0]["ID"], result[0]["email"], result[0]["password"]);
                 this.isAuthenticated = true;
             } 
@@ -29,5 +28,9 @@ export class AuthService {
     
     register(email:string, password:string): Observable<boolean>{
        return this.http.post<boolean>(this.baseurl + 'register', new User(null, email, password));
+    }
+
+    sendEmail(email:string, task:string): Observable<boolean>{
+        return this.http.post<boolean>(this.baseurl + 'sendEmail', {'email' : email, 'task' : task});
     }
 }

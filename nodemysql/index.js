@@ -5,6 +5,7 @@ const port = 3000; //porta padrão
 const mysql = require('mysql');
 const crypto = require("crypto");
 const validator = require('email-validator');
+var nodemailer = require('nodemailer');
 
 	
 //configurando o body parser para pegar POSTS mais tarde
@@ -20,7 +21,6 @@ app.use('/', router);
 //inicia o servidor
 app.listen(port);
 console.log('API funcionando!');
-
 
 const DADOS_CRIPTOGRAFAR = {
     algoritmo : "aes256",
@@ -53,6 +53,31 @@ function criptografar(senha) {
     cipher.update(senha);
     return cipher.final(DADOS_CRIPTOGRAFAR.tipo);
 };
+
+
+router.post('/sendEmail', bodyParser.json(),  (req, res) =>{
+    const email = req.body.email;
+    const task = req.body.task;
+
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'kanbandsw@gmail.com',
+            pass: 'kanban123'
+        }
+    });
+
+    var mailOptions = {
+            from: 'kanbandsw@gmail.com',
+            to: email,
+            subject: 'Kanban DSW: Tarefa ' + task,
+            text: 'Tarefa ' + task + ' concluída com sucesso!'
+    };
+
+    transporter.sendMail(mailOptions);
+
+    res.json(true);
+});
 
 router.post('/register', (req, res) =>{
     const email = req.body.email;
@@ -103,6 +128,7 @@ router.post('/task', (req, res) =>{
     const name = req.body.name.substring(0,150);
     const percentage = parseInt(req.body.percentage);
     const fk_User = parseInt(req.body.fk_User);
+
     execSQLQuery(`INSERT INTO Task(name, percentage, fk_User) VALUES('${name}','${percentage}', '${fk_User}')`, res);
 });
 
