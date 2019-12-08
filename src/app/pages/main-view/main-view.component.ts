@@ -32,6 +32,12 @@ export class MainViewComponent implements OnInit {
             this.router.navigate(['/login']);
         }
 
+        this.reloadTasks();
+
+        
+    }
+
+    private reloadTasks(){
         this.board = new Board([
             new Column('A se fazer', true, []),
             new Column('Em andamento', false, []),
@@ -66,12 +72,8 @@ export class MainViewComponent implements OnInit {
                     }
                 });
             });
-
-
         }
     }
-
-
 
     get f() { return this.addForm.controls; }
 
@@ -128,6 +130,8 @@ export class MainViewComponent implements OnInit {
             nameAdd: "",
             percentAdd: ""
         });
+
+        this.reloadTasks();
     }
 
 
