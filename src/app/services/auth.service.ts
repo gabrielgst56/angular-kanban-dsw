@@ -30,7 +30,11 @@ export class AuthService {
        return this.http.post<boolean>(this.baseurl + 'register', new User(null, email, password));
     }
 
-    sendEmail(email:string, task:string): Observable<boolean>{
-        return this.http.post<boolean>(this.baseurl + 'sendEmail', {'email' : email, 'task' : task});
+    sendEmail(email:string, task:string){
+       this.http.post<boolean>(this.baseurl + 'sendEmail', {'email' : email, 'task' : task}).subscribe((result) => {});
     }
+
+    verifyUser(email:string):Observable<boolean>{
+        return this.http.post<boolean>(this.baseurl + 'verifyUser', {'email' : email});
+     }
 }

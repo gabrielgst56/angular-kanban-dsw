@@ -55,7 +55,7 @@ function criptografar(senha) {
 };
 
 
-router.post('/sendEmail', bodyParser.json(),  (req, res) =>{
+router.post('/sendEmail',  (req, res) =>{
     const email = req.body.email;
     const task = req.body.task;
 
@@ -101,9 +101,15 @@ router.post('/register', (req, res) =>{
     }
 });
 
+router.post('/verifyUser', (req, res) =>{
+    const email = req.body.email;
+    
+    execSQLQuery(`SELECT * FROM User WHERE email = '${email}'`, res);
+});
+
 router.post('/login', (req, res) =>{
-    const email = req.body.email.substring(0,150);
-    let password = req.body.password.substring(0, 255);
+    const email = req.body.email;
+    let password = req.body.password;
 
     password = criptografar(password);
     
@@ -113,7 +119,6 @@ router.post('/login', (req, res) =>{
 router.get('/task', (req, res) =>{
     execSQLQuery('SELECT * FROM Task', res);
 })
-
 
 router.get('/task/:id?', (req, res) =>{
     let fk_User = parseInt(req.params.id);
@@ -125,7 +130,7 @@ router.delete('/task/:id', (req, res) =>{
 })
 
 router.post('/task', (req, res) =>{
-    const name = req.body.name.substring(0,150);
+    const name = req.body.name;
     const percentage = parseInt(req.body.percentage);
     const fk_User = parseInt(req.body.fk_User);
 
@@ -134,7 +139,7 @@ router.post('/task', (req, res) =>{
 
 router.patch('/task/:id', (req, res) =>{
     const id = parseInt(req.params.id);
-    const name = req.body.name.substring(0,150);
+    const name = req.body.name;
     const percentage = parseInt(req.body.percentage);
     execSQLQuery(`UPDATE Task SET name='${name}', percentage='${percentage}' WHERE ID=${id}`, res);
 })

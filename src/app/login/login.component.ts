@@ -29,7 +29,9 @@ export class LoginComponent implements OnInit {
         let result = this.authService.login(email, password).subscribe((result) => {
             if (result[0] != null){
                 this.router.navigate(['/kanban']);
-            } 
+            } else {
+                alert('usuário e/ou senha inválido(s)');
+            }
         });
 
     }
@@ -37,5 +39,5 @@ export class LoginComponent implements OnInit {
     register() {
         this.router.navigate(['/register']);
     }
-
+    
 }

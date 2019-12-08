@@ -27,12 +27,20 @@ export class RegisterComponent implements OnInit {
     get f() { return this.form.controls; }
 
     onSubmit(email: string, password: string) {
-        let response = this.authService.register(email, password).subscribe((result) => {
-            console.log(result);
-            if (result){
-                this.router.navigate(['']);
+        this.authService.verifyUser(email).subscribe((result) => {
+            if (!result[0]) {
+                this.authService.register(email, password).subscribe((result) => {
+                    if (result) {
+                        this.router.navigate(['']);
+                    } else{
+                        alert("Email inválido e/ou senha precisa ter no mínimo 6 caracteres.");
+                    }
+                });
+            }else{
+                alert("Email já cadastrado.");
             }
-         });
+        });
+
     }
-    
+
 }

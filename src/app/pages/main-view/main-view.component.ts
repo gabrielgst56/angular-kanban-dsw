@@ -94,12 +94,18 @@ export class MainViewComponent implements OnInit {
 
         let percent = this.addForm.value.percentAdd;
         let name = this.addForm.value.nameAdd;
-        let task = new Task(null, name, percent, this.authService.user.ID);
 
         if (name == "") {
             alert("Descrição vazia.");
             return;
         }
+
+        if (percent == null || percent.toString() == ""){
+            alert("Porcentagem inválida.");
+            return;
+        }
+        
+        let task = new Task(null, name, percent, this.authService.user.ID);
 
         if (percent == 0) {
             this.board.columns[0].tasks.push(task);
@@ -108,7 +114,7 @@ export class MainViewComponent implements OnInit {
             this.board.columns[1].tasks.push(task);
         }
         else if (percent == 100) {
-            this.authService.sendEmail(this.authService.user.email, name).subscribe((result) => {});
+            this.authService.sendEmail(this.authService.user.email, name);
             this.board.columns[2].tasks.push(task);
         }
         else {
@@ -129,27 +135,36 @@ export class MainViewComponent implements OnInit {
 
         let percent = this.editForm.value.percentEdit;
         let name = this.editForm.value.nameEdit;
-        let edited = false;
 
         if (name == "") {
             alert("Descrição vazia.");
             return;
         }
 
+        if (percent == null || percent.toString() == ""){
+            alert("Porcentagem inválida.");
+            return;
+        }
+
         let task = new Task(this.actualEditTask.ID, name, percent, this.authService.user.ID)
 
-        this.board.columns[0].tasks = this.board.columns[0].tasks.filter(task => task.name !== this.actualEditTask.name);
-        this.board.columns[1].tasks = this.board.columns[1].tasks.filter(task => task.name !== this.actualEditTask.name);
-        this.board.columns[2].tasks = this.board.columns[2].tasks.filter(task => task.name !== this.actualEditTask.name);
-
         if (percent == 0) {
+            this.board.columns[0].tasks = this.board.columns[0].tasks.filter(task => task.name !== this.actualEditTask.name);
+            this.board.columns[1].tasks = this.board.columns[1].tasks.filter(task => task.name !== this.actualEditTask.name);
+            this.board.columns[2].tasks = this.board.columns[2].tasks.filter(task => task.name !== this.actualEditTask.name);
             this.board.columns[0].tasks.push(task);
         }
         else if (percent > 0 && percent < 100) {
+            this.board.columns[0].tasks = this.board.columns[0].tasks.filter(task => task.name !== this.actualEditTask.name);
+            this.board.columns[1].tasks = this.board.columns[1].tasks.filter(task => task.name !== this.actualEditTask.name);
+            this.board.columns[2].tasks = this.board.columns[2].tasks.filter(task => task.name !== this.actualEditTask.name);
             this.board.columns[1].tasks.push(task);
         }
         else if (percent == 100) {
-            this.authService.sendEmail(this.authService.user.email, name).subscribe((result) => {});
+            this.board.columns[0].tasks = this.board.columns[0].tasks.filter(task => task.name !== this.actualEditTask.name);
+            this.board.columns[1].tasks = this.board.columns[1].tasks.filter(task => task.name !== this.actualEditTask.name);
+            this.board.columns[2].tasks = this.board.columns[2].tasks.filter(task => task.name !== this.actualEditTask.name);
+            this.authService.sendEmail(this.authService.user.email, name);
             this.board.columns[2].tasks.push(task);
         }
         else {
